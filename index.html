@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Grid Generator — testscript.info</title>
+<meta name="description" content="Generatore visuale di layout CSS Grid: configura colonne, righe, gap e grid-template-areas con preview live e codice copiabile.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CSS Grid Generator — testscript.info">
+<meta property="og:description" content="Generatore visuale di layout CSS Grid con preview live e codice copiabile.">
+<meta property="og:url" content="https://testscript.info/demo/css-grid-generator/">
+<meta property="og:image" content="https://testscript.info/img/cover-image_1080.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CSS Grid Generator — testscript.info">
+<meta name="twitter:description" content="Generatore visuale di layout CSS Grid con preview live e codice copiabile.">
+<meta name="twitter:image" content="https://testscript.info/img/cover-image_1080.jpg">
+<link rel="canonical" href="https://testscript.info/demo/css-grid-generator/">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"CSS Grid Generator","programmingLanguage":"CSS","url":"https://testscript.info/demo/css-grid-generator/","isPartOf":{"@type":"WebSite","name":"testscript.info","url":"https://testscript.info"}}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/social.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+:root{--bg:#0f172a;--surface:#1e293b;--surface-elevated:#283548;--border:rgba(255,255,255,.08);--text:#e2e8f0;--muted:#94a3b8;--accent:#06b6d4;--accent-glow:rgba(6,182,212,.2)}
+[data-theme="light"]{--bg:#f8fafc;--surface:#fff;--surface-elevated:#f1f5f9;--border:#e2e8f0;--text:#1e293b;--muted:#64748b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.5rem;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.brand{text-decoration:none;font-weight:700;font-size:1.1rem;color:var(--text)}.brand span{color:var(--accent)}.brand small{font-weight:400;color:var(--muted);font-size:.85rem}
+.controls{display:flex;gap:.5rem;align-items:center}
+.controls a,.controls button{background:var(--surface-elevated);color:var(--text);border:1px solid var(--border);padding:.4rem .75rem;border-radius:.5rem;cursor:pointer;text-decoration:none;font-size:.85rem;display:flex;align-items:center;gap:.35rem;transition:all .2s}
+.controls a:hover,.controls button:hover{border-color:var(--accent);color:var(--accent)}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:0;height:calc(100vh - 53px)}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:1.25rem}
+.sidebar h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.75rem;margin-top:1rem}
+.sidebar h3:first-child{margin-top:0}
+.form-group{margin-bottom:.75rem}
+.form-group label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:.25rem}
+.form-group input,.form-group select{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:.35rem;padding:.4rem .6rem;font-size:.85rem;font-family:'JetBrains Mono',monospace;outline:none}
+.form-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.range-row{display:flex;align-items:center;gap:.5rem}
+.range-row input[type="range"]{flex:1;accent-color:var(--accent)}
+.range-row .val{min-width:35px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:.85rem}
+.presets{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.75rem}
+.preset-btn{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.3rem .6rem;border-radius:.35rem;font-size:.75rem;cursor:pointer;transition:all .2s}
+.preset-btn:hover{border-color:var(--accent);color:var(--accent)}
+.main-area{display:flex;flex-direction:column;overflow:hidden}
+.preview{flex:1;padding:1.5rem;display:flex;align-items:center;justify-content:center;overflow:auto}
+.grid-preview{width:100%;max-width:800px;min-height:300px;border:2px dashed var(--border);border-radius:.75rem;padding:.5rem}
+.grid-preview > div{background:var(--accent-glow);border:1px solid var(--accent);border-radius:.5rem;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent);min-height:60px;transition:all .3s}
+.code-output{background:var(--surface);border-top:1px solid var(--border);max-height:250px;overflow-y:auto}
+.code-header{display:flex;justify-content:space-between;align-items:center;padding:.5rem 1rem;border-bottom:1px solid var(--border)}
+.code-header span{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+pre{padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.85rem;white-space:pre;overflow-x:auto;line-height:1.5;margin:0}
+.copy-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.25rem .5rem;border-radius:.35rem;cursor:pointer;font-size:.8rem;display:flex;align-items:center;gap:.25rem}
+.copy-btn:hover{color:var(--accent);border-color:var(--accent)}
+@media(max-width:768px){.layout{grid-template-columns:1fr;height:auto}.sidebar{border-right:none;border-bottom:1px solid var(--border)}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div><a href="../" class="brand">ts<span>.</span> <small>/ css-grid</small></a></div>
+  <div class="controls">
+    <button onclick="toggleTheme()"><i class="bi bi-sun-fill" id="themeIcon"></i></button>
+    <a href="../"><i class="bi bi-arrow-left"></i> Demo Hub</a>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <h3>Preset Layout</h3>
+    <div class="presets">
+      <button class="preset-btn" onclick="applyPreset('holy-grail')">Holy Grail</button>
+      <button class="preset-btn" onclick="applyPreset('dashboard')">Dashboard</button>
+      <button class="preset-btn" onclick="applyPreset('cards')">Card Grid</button>
+      <button class="preset-btn" onclick="applyPreset('sidebar')">Sidebar</button>
+      <button class="preset-btn" onclick="applyPreset('masonry')">Magazine</button>
+    </div>
+
+    <h3>Colonne</h3>
+    <div class="form-group">
+      <div class="range-row">
+        <input type="range" id="cols" min="1" max="6" value="3" oninput="updateGrid()">
+        <span class="val" id="colsVal">3</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Template Columns</label>
+      <input type="text" id="colTemplate" value="1fr 1fr 1fr" oninput="updateGrid()">
+    </div>
+
+    <h3>Righe</h3>
+    <div class="form-group">
+      <div class="range-row">
+        <input type="range" id="rows" min="1" max="6" value="3" oninput="updateGrid()">
+        <span class="val" id="rowsVal">3</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Template Rows</label>
+      <input type="text" id="rowTemplate" value="auto auto auto" oninput="updateGrid()">
+    </div>
+
+    <h3>Spacing</h3>
+    <div class="form-group">
+      <label>Gap (px)</label>
+      <div class="range-row">
+        <input type="range" id="gap" min="0" max="40" value="12" oninput="updateGrid()">
+        <span class="val" id="gapVal">12</span>
+      </div>
+    </div>
+
+    <h3>Allineamento</h3>
+    <div class="form-group">
+      <label>justify-items</label>
+      <select id="justifyItems" onchange="updateGrid()">
+        <option value="stretch" selected>stretch</option>
+        <option value="start">start</option>
+        <option value="center">center</option>
+        <option value="end">end</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>align-items</label>
+      <select id="alignItems" onchange="updateGrid()">
+        <option value="stretch" selected>stretch</option>
+        <option value="start">start</option>
+        <option value="center">center</option>
+        <option value="end">end</option>
+      </select>
+    </div>
+
+    <h3>Elementi</h3>
+    <div class="form-group">
+      <label>Numero di elementi</label>
+      <div class="range-row">
+        <input type="range" id="items" min="1" max="12" value="6" oninput="updateGrid()">
+        <span class="val" id="itemsVal">6</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="preview">
+      <div class="grid-preview" id="gridPreview"></div>
+    </div>
+    <div class="code-output">
+      <div class="code-header">
+        <span><i class="bi bi-code-slash"></i> CSS Output</span>
+        <button class="copy-btn" onclick="copyCode()"><i class="bi bi-clipboard"></i> Copia</button>
+      </div>
+      <pre id="codeOutput"></pre>
+    </div>
+  </div>
+</div>
+
+<div class="social-share" id="socialShare">
+  <a href="#" class="share-fb" onclick="shareOn('facebook')"><i class="bi bi-facebook"></i></a>
+  <a href="#" class="share-x" onclick="shareOn('x')"><i class="bi bi-twitter-x"></i></a>
+  <a href="#" class="share-li" onclick="shareOn('linkedin')"><i class="bi bi-linkedin"></i></a>
+  <a href="#" class="share-wa" onclick="shareOn('whatsapp')"><i class="bi bi-whatsapp"></i></a>
+  <a href="#" class="share-tg" onclick="shareOn('telegram')"><i class="bi bi-telegram"></i></a>
+</div>
+<script src="../shared/social.js"></script>
+<script>
+const colors = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#f97316','#14b8a6','#a855f7','#6366f1','#84cc16'];
+
+function updateGrid() {
+  const cols = document.getElementById('cols').value;
+  const rows = document.getElementById('rows').value;
+  const colTemplate = document.getElementById('colTemplate').value;
+  const rowTemplate = document.getElementById('rowTemplate').value;
+  const gap = document.getElementById('gap').value;
+  const justifyItems = document.getElementById('justifyItems').value;
+  const alignItems = document.getElementById('alignItems').value;
+  const itemCount = document.getElementById('items').value;
+
+  document.getElementById('colsVal').textContent = cols;
+  document.getElementById('rowsVal').textContent = rows;
+  document.getElementById('gapVal').textContent = gap;
+  document.getElementById('itemsVal').textContent = itemCount;
+
+  const preview = document.getElementById('gridPreview');
+  preview.style.display = 'grid';
+  preview.style.gridTemplateColumns = colTemplate;
+  preview.style.gridTemplateRows = rowTemplate;
+  preview.style.gap = gap + 'px';
+  preview.style.justifyItems = justifyItems;
+  preview.style.alignItems = alignItems;
+
+  preview.innerHTML = '';
+  for (let i = 0; i < parseInt(itemCount); i++) {
+    const div = document.createElement('div');
+    div.textContent = i + 1;
+    div.style.borderColor = colors[i % colors.length];
+    div.style.background = colors[i % colors.length] + '20';
+    div.style.color = colors[i % colors.length];
+    preview.appendChild(div);
+  }
+
+  let css = `.container {\n  display: grid;\n  grid-template-columns: ${colTemplate};\n  grid-template-rows: ${rowTemplate};\n  gap: ${gap}px;`;
+  if (justifyItems !== 'stretch') css += `\n  justify-items: ${justifyItems};`;
+  if (alignItems !== 'stretch') css += `\n  align-items: ${alignItems};`;
+  css += '\n}';
+
+  document.getElementById('codeOutput').textContent = css;
+}
+
+const presets = {
+  'holy-grail': {cols:3,rows:3,colTemplate:'200px 1fr 200px',rowTemplate:'auto 1fr auto',gap:12,items:5},
+  'dashboard':  {cols:4,rows:3,colTemplate:'repeat(4, 1fr)',rowTemplate:'auto 1fr auto',gap:16,items:8},
+  'cards':      {cols:3,rows:2,colTemplate:'repeat(3, 1fr)',rowTemplate:'auto auto',gap:20,items:6},
+  'sidebar':    {cols:2,rows:1,colTemplate:'250px 1fr',rowTemplate:'1fr',gap:0,items:2},
+  'masonry':    {cols:3,rows:4,colTemplate:'1fr 2fr 1fr',rowTemplate:'auto auto auto auto',gap:12,items:7}
+};
+
+function applyPreset(name) {
+  const p = presets[name];
+  document.getElementById('cols').value = p.cols;
+  document.getElementById('rows').value = p.rows;
+  document.getElementById('colTemplate').value = p.colTemplate;
+  document.getElementById('rowTemplate').value = p.rowTemplate;
+  document.getElementById('gap').value = p.gap;
+  document.getElementById('items').value = p.items;
+  updateGrid();
+}
+
+function copyCode() {
+  navigator.clipboard.writeText(document.getElementById('codeOutput').textContent);
+}
+
+function toggleTheme(){const h=document.documentElement;const n=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',n);document.getElementById('themeIcon').className=n==='dark'?'bi bi-sun-fill':'bi bi-moon-stars-fill';localStorage.setItem('demo_theme',n);}
+(()=>{const s=localStorage.getItem('demo_theme');if(s){document.documentElement.setAttribute('data-theme',s);document.getElementById('themeIcon').className=s==='dark'?'bi bi-sun-fill':'bi bi-moon-stars-fill';}})();
+
+updateGrid();
+</script>
+</body>
+</html>
